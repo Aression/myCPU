@@ -41,6 +41,7 @@ module alu(
     wire [31:0] mult_a,mult_b;
     wire [63:0] hilo_temp;
     wire [63:0] div_result;
+    
     assign mult_a = ((op==`EXE_MULT_OP)&&(srca[31]==1'b1))?(~srca+1):srca;
     assign mult_b = ((op==`EXE_MULT_OP)&&(srcb[31]==1'b1))?(~srcb+1):srcb;
     assign hilo_temp = ((op==`EXE_MULT_OP)&&(srca[31]^srcb[31] == 1'b1)) ? ~(mult_a*mult_b)+1 : mult_a*mult_b;
@@ -259,33 +260,3 @@ assign overflow = ((op==`EXE_ADD_OP)|(op==`EXE_ADDI_OP))?((srca[31] & srcb[31] &
                     1'b0;
 
 endmodule
-
-
-
-/*wire[31:0] s,bout;
-	assign bout = op[2] ? ~srcb : srcb;    //如果为减法，则srcb取反
-	assign s = srca + bout + op[2];
-    
-    always @(*) begin 
-            case(op)
-                3'b000:result = srca & srcb;
-                3'b001:result = srca | srcb;
-                3'b010:result = srca + srcb;
-                3'b100:result = srca & ~srcb;
-                3'b101:result = srca | ~srcb;
-                3'b110:result = srca - srcb;
-                3'b111:result = (srca < srcb) ? 1:0;
-                default:result = 32'b0;
-            endcase
-        end
-    assign zero = (srca == srcb) ? 1 : 0;
-    
-    always @(*) begin
-        case (op[2:1])
-			2'b01:overflow <= srca[31] & srcb[31] & ~s[31] |
-							~srca[31] & ~srcb[31] & s[31];
-			2'b11:overflow <= srca[31] & srcb[31] & ~s[31] |
-							~srca[31] & ~srcb[31] & s[31];
-			default : overflow <= 1'b0;
-		endcase
-	end*/
